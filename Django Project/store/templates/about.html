@@ -1,14 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>About Page</title>
-</head>
-<body>
-    <h2>This is about page</h2>
-    <a href="{% url 'store:index' %}">Home Page</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}About Page{% endblock %}
+
+{% block content %}
+    <h1>About Us</h1>
+    <p>Welcome to our store! We are dedicated to providing you with the best products and services.</p>
+    <p>Our mission is to offer high-quality products at competitive prices, ensuring customer satisfaction.</p>
+    <p>Feel free to browse our product catalog and reach out to us with any questions or feedback.</p>
+{% endblock %}

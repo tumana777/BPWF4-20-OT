@@ -1,5 +1,8 @@
 from django.urls import path
-from store.views import index, about, products_json, product_list, product_detail
+from store.views import (
+    index, about, products_json, product_list, product_detail,
+    add_product, update_product, delete_product
+)
 
 app_name = 'store'
 
@@ -9,4 +12,7 @@ urlpatterns = [
     path('products.json', products_json, name='products_json'),
     path('products/', product_list, name='product_list'),
     path('products/<int:product_pk>/', product_detail, name='product_detail'),
+    path('add-product/', add_product, name='add_product'),
+    path('update-product/<int:product_pk>/', update_product, name='update_product'),
+    path('delete-product/<int:product_pk>/', delete_product, name='delete_product'),
 ]
