@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.http import JsonResponse
 
@@ -24,7 +25,7 @@ def about(request):
     return render(request, 'about.html')
 
 def product_list(request):
-    all_products = Product.objects.filter(is_available=True).order_by('-created_at')
+    all_products = Product.objects.filter(is_available=True).select_related('category').order_by('-created_at')
     return render(request, 'product_list.html', context={'products': all_products})
 
 def product_detail(request, product_pk):

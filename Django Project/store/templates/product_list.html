@@ -4,12 +4,20 @@
 
 {% block content %}
     <h1>Products</h1>
-    <ul>
+    <div class="row">
         {% for product in products %}
-            <a href="{% url 'store:product_detail' product_pk=product.pk %}">
-                <li>{{ product.name }} - ${{ product.price }}</li>
-            </a>
+            <div class="col-md-4 mb-4">
+                <section class="card" style="max-width: 320px">
+                  <img src="..." class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h4 class="card-title">{{ product.name }}</h4>
+                    <p class="card-text">{{ product.description }}</p>
+                    <a href="{% url 'store:product_detail' product_pk=product.pk %}" class="btn btn-primary theme-primary">Details</a>
+                      <span>{{ product.category.name }}</span>
+                  </div>
+                </section>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
     <a type="button" class="btn btn-primary" href="{% url 'store:add_product' %}">Add Product</a>
 {% endblock %}
