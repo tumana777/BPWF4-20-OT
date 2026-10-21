@@ -109,10 +109,21 @@ class ProductCreateView(CreateView):
     form_class = ProductForm
     success_url = reverse_lazy('store:product_list')
 
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'update_product.html'
+    form_class = ProductUpdateForm
+    pk_url_kwarg = 'product_pk'
+    queryset = Product.objects.filter(is_available=True)
 
+    def get_success_url(self):
+        return reverse_lazy('store:product_detail', kwargs={'product_pk': self.object.pk})
 
-
-
+class ProductDeleteView(DeleteView):
+    model = Product
+    pk_url_kwarg = 'product_pk'
+    queryset = Product.objects.filter(is_available=True)
+    success_url = reverse_lazy('store:product_list')
 
 
 
