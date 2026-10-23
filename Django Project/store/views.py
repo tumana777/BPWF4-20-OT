@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.urls import reverse_lazy
@@ -37,7 +38,7 @@ def product_detail(request, product_pk):
 
 def add_product(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
 
         # print(request.POST)
 
@@ -54,7 +55,7 @@ def update_product(request, product_pk):
     product = get_object_or_404(Product, pk=product_pk)
 
     if request.method == 'POST':
-        form = ProductUpdateForm(request.POST, instance=product)
+        form = ProductUpdateForm(request.POST, request.FILES, instance=product,)
 
         if form.is_valid():
             form.save()
@@ -103,11 +104,12 @@ class ProductDetailView(DetailView):
     #     return get_object_or_404(Product, pk=self.kwargs['product_pk'], is_available=True)
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     template_name = 'add_product.html'
     form_class = ProductForm
     success_url = reverse_lazy('store:product_list')
+    login_url = reverse_lazy('user:login')
 
 class ProductUpdateView(UpdateView):
     model = Product
