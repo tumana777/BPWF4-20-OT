@@ -81,6 +81,7 @@ class ProductListView(ListView):
     queryset = Product.objects.filter(is_available=True).select_related('category').order_by('-created_at')
     # ordering = ['-created_at']
     context_object_name = 'products'
+    paginate_by = 1
 
     # def get_queryset(self):
     #     return Product.objects.filter(is_available=True).select_related('category').order_by('-created_at')
