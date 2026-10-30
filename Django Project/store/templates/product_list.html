@@ -5,47 +5,61 @@
 {% block content %}
     <h1>Products({{ count }})</h1>
     <div class="row">
-        {% for product in products %}
-            <div class="col-md-4 mb-4">
-                <section class="card" style="max-width: 320px">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.image }}">
-                    {% endif %}
-                  <div class="card-body">
-                    <h4 class="card-title">{{ product.name }}</h4>
-                    <p class="card-text">{{ product.description }}</p>
-                    <a href="{% url 'store:product_detail' product_pk=product.pk %}" class="btn btn-primary theme-primary">Details</a>
-                      <span>{{ product.category.name }}</span>
-                  </div>
-                </section>
+        <div class="col-md-3">
+            <form>
+                <input class="form-control mb-3" type="number" name="min_price" placeholder="Min Price" value="{{ request.GET.min_price }}">
+                <input class="form-control mb-3" type="number" name="max_price" placeholder="Max Price" value="{{ request.GET.max_price }}">
+                <input type="hidden" name="q" value="{{ request.GET.q }}">
+                <button class="btn btn-primary" type="submit">Filter</button>
+            </form>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <section class="card" style="max-width: 320px">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.image }}">
+                            {% endif %}
+                          <div class="card-body">
+                            <h4 class="card-title">{{ product.name }}</h4>
+                            <p class="card-text">{{ product.description }}</p>
+                            <a href="{% url 'store:product_detail' product_pk=product.pk %}" class="btn btn-primary theme-primary">Details</a>
+                              <span>{{ product.category.name }}</span>
+                          </div>
+                        </section>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     </div>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-          {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page=1">&laquo;First</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-          {% else %}
-              <li class="page-item disabled"><a class="page-link">&laquo;First</a></li>
-              <li class="page-item disabled"><a class="page-link">Previous</a></li>
-          {% endif %}
-            {% for num in paginator.page_range %}
-                {% if num == page_obj.number  %}
-                    <li class="page-item active"><a class="page-link">{{ num }}</a></li>
-                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
-                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-                {% endif %}
-            {% endfor %}
-          {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ paginator.num_pages }}">Last&raquo;</a></li>
-          {% else %}
-              <li class="page-item disabled"><a class="page-link">Next</a></li>
-              <li class="page-item disabled"><a class="page-link">Last&raquo;</a></li>
-          {% endif %}
-      </ul>
-    </nav>
+    {% if is_paginated %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+              {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo;First</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+              {% else %}
+                  <li class="page-item disabled"><a class="page-link">&laquo;First</a></li>
+                  <li class="page-item disabled"><a class="page-link">Previous</a></li>
+              {% endif %}
+                {% for num in paginator.page_range %}
+                    {% if num == page_obj.number  %}
+                        <li class="page-item active"><a class="page-link">{{ num }}</a></li>
+                    {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+              {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ paginator.num_pages }}">Last&raquo;</a></li>
+              {% else %}
+                  <li class="page-item disabled"><a class="page-link">Next</a></li>
+                  <li class="page-item disabled"><a class="page-link">Last&raquo;</a></li>
+              {% endif %}
+          </ul>
+        </nav>
+    {% endif %}
     <hr>
     <a type="button" class="btn btn-primary mb-4" href="{% url 'store:add_product' %}">Add Product</a>
 {% endblock %}

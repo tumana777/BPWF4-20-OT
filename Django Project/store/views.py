@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from store.models import Product
 from store.forms import ProductForm, ProductUpdateForm
 
+from django.db.models import Q
+
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
 
@@ -78,19 +80,36 @@ def delete_product(request, product_pk):
 class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
-    queryset = Product.objects.filter(is_available=True).select_related('category').order_by('-created_at')
+    # queryset = Product.objects.filter(is_available=True).select_related('category').order_by('-created_at')
     # ordering = ['-created_at']
     context_object_name = 'products'
-    paginate_by = 1
+    # paginate_by = 1
 
-    # def get_queryset(self):
-    #     return Product.objects.filter(is_available=True).select_related('category').order_by('-created_at')
+    def get_queryset(self):
+        all_products = Product.objects.filter(is_available=True).select_related('category').order_by('-created_at')
+
+        search_query = self.request.GET.get('q')
+
+        if search_query:
+            all_products = all_products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+
+        min_price = self.request.GET.get('min_price')
+
+        if min_price:
+            all_products = all_products.filter(price__gte=min_price)
+
+        max_price = self.request.GET.get('max_price')
+
+        if max_price:
+            all_products = all_products.filter(price__lte=max_price)
+
+        return all_products
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['count'] = self.queryset.count()
+        context['count'] = self.get_queryset().count()
 
         return context
 
