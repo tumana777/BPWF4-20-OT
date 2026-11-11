@@ -19,13 +19,17 @@ from django.urls import include, path
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
 from django.conf.urls.static import static
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('store.urls', namespace='store')),
     path('users/', include('user.urls', namespace='user')),
     path('api/', include('api.urls', namespace='api')),
-    path("api-auth/", include("rest_framework.urls"))
+    path("api-auth/", include("rest_framework.urls")),
+    path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='api-schema'), name='api-docs'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='api-schema'), name='api-redoc'),
 ]  + debug_toolbar_urls()
 
 if settings.DEBUG:

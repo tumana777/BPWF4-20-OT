@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     'debug_toolbar',
     'rest_framework',
+    'drf_spectacular',
 
     # local apps
     'store.apps.StoreConfig',
@@ -180,4 +181,11 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 2,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'E-Commerce API',
+    'DESCRIPTION': 'API documentation for the E-Commerce project',
+    'VERSION': '1.0.0',
 }

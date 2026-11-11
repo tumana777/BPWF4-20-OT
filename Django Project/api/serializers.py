@@ -36,7 +36,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ('is_available', )
+        fields = "__all__"
 
     def get_total_price(self, obj):
         return obj.price * obj.quantity
@@ -46,8 +46,10 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         model = Product
         exclude = ('is_available', )
 
-
-
+class ProductUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
 
 
 
