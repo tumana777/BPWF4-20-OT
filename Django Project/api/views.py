@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.authentication import BaseAuthentication
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from rest_framework.generics import (
@@ -7,6 +8,7 @@ from rest_framework.generics import (
 )
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from store.models import Product, Category
 from rest_framework.response import Response
@@ -89,7 +91,8 @@ class ProductRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.select_related('category').order_by('-created_at')
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def get_serializer_class(self):
         if self.action == 'list':

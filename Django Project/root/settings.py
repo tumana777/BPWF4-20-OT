@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'drf_spectacular',
+    'rest_framework_simplejwt',
 
     # local apps
     'store.apps.StoreConfig',

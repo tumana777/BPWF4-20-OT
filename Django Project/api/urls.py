@@ -1,5 +1,9 @@
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from .views import (
     CategoryListAPIView, ProductListAPIView,
@@ -25,4 +29,6 @@ urlpatterns = [
     # path('products/', ProductListCreateAPIView.as_view(), name='product_list_create'),
     # path('products/<int:product_pk>/', ProductRetrieveUpdateDestroyAPIView.as_view(), name='product_retrieve_update_destroy'),
     path('', include(router.urls)),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
